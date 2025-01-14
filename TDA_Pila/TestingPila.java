@@ -1,7 +1,7 @@
 package TDA_Pila;
 
-//import TDA_Pila.Dinamica.Pila;
-import TDA_Pila.Estatica.Pila;
+import TDA_Pila.Dinamica.Pila;
+//import TDA_Pila.Estatica.Pila;
 
 /**
  *
