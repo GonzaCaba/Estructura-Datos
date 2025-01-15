@@ -69,20 +69,21 @@ public class Pila {
         if(this.tope == null)
             s = "Pila vacia";
         else {
-            //se ubica para recorrer la pila
-            Nodo aux = this.tope;
             s = "[";
-
-            while (aux != null){
-                //se agrega el texto del elem y avanza
-                s += aux.getElem().toString();
-                aux = aux.getEnlace();
-                if(aux != null)
-                    s += ",";
-            }
-            s += "]";
+            s += toStringAux("", this.tope);
+            s += "] <--- Tope";
         }
         return s;
+    }
+
+    private String toStringAux(String cadena, Nodo nodoActual){
+        if(nodoActual.getEnlace()!=null){
+            cadena += toStringAux(cadena,nodoActual.getEnlace()) + "," + nodoActual.getElem().toString(); 
+        }
+        else{
+            cadena += nodoActual.getElem().toString();
+        }
+        return cadena;
     }
 
     private Nodo cloneAux(Nodo unNodo){
