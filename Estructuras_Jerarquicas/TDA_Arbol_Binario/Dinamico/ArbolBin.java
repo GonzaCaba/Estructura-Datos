@@ -4,7 +4,7 @@ import TDA_Lista.Dinamica.Lista;
 import TDA_Cola.Dinamica.Cola;
 
 public class ArbolBin {
-    private NodoArbol raiz;
+    private NodoArbolBin raiz;
 
     public ArbolBin(){
         this.raiz = null;
@@ -18,16 +18,16 @@ public class ArbolBin {
         boolean exito = false;
         //Caso Especial: el elemento a insertar, es el primero del Arbol
         if(this.esVacio()){
-            this.raiz = new NodoArbol(elemNuevo, null, null);
+            this.raiz = new NodoArbolBin(elemNuevo, null, null);
             exito = true;
         } else{
-            NodoArbol nodoPadre = this.obtenerNodo(this.raiz, elemPadre);
+            NodoArbolBin nodoPadre = this.obtenerNodo(this.raiz, elemPadre);
             if(nodoPadre != null){
                 if(pos == 'I' && nodoPadre.getHijoIzq() == null){
-                    nodoPadre.setHijoIzq(new NodoArbol(elemNuevo, null, null));
+                    nodoPadre.setHijoIzq(new NodoArbolBin(elemNuevo, null, null));
                     exito = true;
                 } else if (pos == 'D' && nodoPadre.getHijoDer() == null){
-                    nodoPadre.setHijoDer(new NodoArbol(elemNuevo, null, null));
+                    nodoPadre.setHijoDer(new NodoArbolBin(elemNuevo, null, null));
                     exito = true;
                 }
             }
@@ -50,7 +50,7 @@ public class ArbolBin {
     public Object padre(Object elemHijo){
         Object elementoPadre = null;
         if(this.raiz != null && !this.raiz.getElemento().equals(elemHijo)){
-            NodoArbol nodoAux = this.obtenerNodoPadre(this.raiz, elemHijo);
+            NodoArbolBin nodoAux = this.obtenerNodoPadre(this.raiz, elemHijo);
             if(nodoAux != null){
                 elementoPadre = nodoAux.getElemento();
             }
@@ -115,16 +115,16 @@ public class ArbolBin {
         return listaFrontera;
     }
 
-    // Privados
-    private NodoArbol cloneAux(NodoArbol unNodo){
-        NodoArbol nodoClon = null;
+    // Metodos Privados & Auxiliares 
+    private NodoArbolBin cloneAux(NodoArbolBin unNodo){
+        NodoArbolBin nodoClon = null;
         if(unNodo != null){
-            nodoClon = new NodoArbol(unNodo.getElemento(), cloneAux(unNodo.getHijoIzq()), cloneAux(unNodo.getHijoDer()));
+            nodoClon = new NodoArbolBin(unNodo.getElemento(), cloneAux(unNodo.getHijoIzq()), cloneAux(unNodo.getHijoDer()));
         }
         return nodoClon;
     }
 
-    private boolean obtenerAncestrosAux(NodoArbol unNodo, Lista lis, Object unElem){
+    private boolean obtenerAncestrosAux(NodoArbolBin unNodo, Lista lis, Object unElem){
         boolean seEncontro = false;
         if(unNodo != null){
             //Si se encontro el elemento devuelve true
@@ -147,7 +147,7 @@ public class ArbolBin {
         return seEncontro;
     }
 
-    private void fronteraAux(NodoArbol unNodo, Lista unaLista){
+    private void fronteraAux(NodoArbolBin unNodo, Lista unaLista){
         if(unNodo != null){
             //Si el nodo no tiene hijos, es una hoja por lo tanto va anotado en la lista
             if(unNodo.getHijoIzq() == null && unNodo.getHijoDer() == null){
@@ -163,7 +163,7 @@ public class ArbolBin {
         }
     }
 
-    private void listarPreordenAux(NodoArbol unNodo, Lista lis){
+    private void listarPreordenAux(NodoArbolBin unNodo, Lista lis){
         if(unNodo != null){
             //Visita el elemento en el nodo
             lis.insertar(unNodo.getElemento(), lis.longitud()+1);
@@ -174,7 +174,7 @@ public class ArbolBin {
         }
     }
 
-    private void listarInordenAux(NodoArbol unNodo, Lista lis){
+    private void listarInordenAux(NodoArbolBin unNodo, Lista lis){
         if(unNodo != null){
             //Recorre hijo izquierdo
             listarInordenAux(unNodo.getHijoIzq(), lis);
@@ -185,7 +185,7 @@ public class ArbolBin {
         }
     }
 
-    private void listarPosordenAux(NodoArbol unNodo, Lista lis){
+    private void listarPosordenAux(NodoArbolBin unNodo, Lista lis){
         if(unNodo != null){
             //Recorre hijo izquierdo
             listarPosordenAux(unNodo.getHijoIzq(), lis);
@@ -196,13 +196,13 @@ public class ArbolBin {
         }
     }
 
-    private void listarPorNivelesAux(NodoArbol unNodo, Lista lis){
+    private void listarPorNivelesAux(NodoArbolBin unNodo, Lista lis){
         if(unNodo != null){
-            NodoArbol nodoActual;
+            NodoArbolBin nodoActual;
             Cola queue = new Cola();
             queue.poner(unNodo);
             while(!queue.esVacia()){
-                nodoActual = (NodoArbol) queue.obtenerFrente();
+                nodoActual = (NodoArbolBin) queue.obtenerFrente();
                 lis.insertar(nodoActual.getElemento(), lis.longitud()+1);
                 queue.sacar();
                 if(nodoActual.getHijoIzq() != null){
@@ -215,14 +215,14 @@ public class ArbolBin {
         }
     }
 
-    private int nivelAux(Object unElemento, NodoArbol unNodo){
+    private int nivelAux(Object unElemento, NodoArbolBin unNodo){
         int nivelActual = -1;
         if(unNodo != null){
             if(unNodo.getElemento().equals(unElemento)){
                 nivelActual = 0;
             } else{
-                NodoArbol hijoIzq = unNodo.getHijoIzq();
-                NodoArbol hijoDer = unNodo.getHijoDer();
+                NodoArbolBin hijoIzq = unNodo.getHijoIzq();
+                NodoArbolBin hijoDer = unNodo.getHijoDer();
                 int nivelEncontrado = -1;
                 if(hijoIzq != null){
                     nivelEncontrado = nivelAux(unElemento, unNodo.getHijoIzq());
@@ -239,11 +239,11 @@ public class ArbolBin {
         return nivelActual;
     }
 
-    private int alturaAux(NodoArbol unNodo){
+    private int alturaAux(NodoArbolBin unNodo){
         int alturaArbol = -1;
         if (unNodo != null) {
-            NodoArbol hijoIzq = unNodo.getHijoIzq();
-            NodoArbol hijoDer = unNodo.getHijoDer();
+            NodoArbolBin hijoIzq = unNodo.getHijoIzq();
+            NodoArbolBin hijoDer = unNodo.getHijoDer();
             if(hijoIzq == null && hijoDer == null){
                 //Es una hoja, la altura del arbol es 0
                 alturaArbol = 0;
@@ -266,10 +266,10 @@ public class ArbolBin {
         return alturaArbol;
     }
 
-    private NodoArbol obtenerNodo(NodoArbol unNodo, Object unElemento){
+    private NodoArbolBin obtenerNodo(NodoArbolBin unNodo, Object unElemento){
         //Metodo que se le pasa un elemento, y devuelve el nodo cuyo elemento coincida.
         //Si no encuentra el nodo, devuelve null.
-        NodoArbol nodoBuscado = null;
+        NodoArbolBin nodoBuscado = null;
         if(unNodo != null){
             if(unNodo.getElemento().equals(unElemento)){
                 nodoBuscado = unNodo;
@@ -284,14 +284,14 @@ public class ArbolBin {
         return nodoBuscado;
     }
 
-    private NodoArbol obtenerNodoPadre(NodoArbol unNodo, Object elemHijo){
+    private NodoArbolBin obtenerNodoPadre(NodoArbolBin unNodo, Object elemHijo){
         //Metodo que se le pasa un elemento, y devuelve el nodo padre,
         //del nodo que contiene el elemeto pasado por parametro.
         //Si no encuentra el elemento hijo o si es la raiz, devuelve null.
-        NodoArbol nodoBuscado = null;
+        NodoArbolBin nodoBuscado = null;
         if(unNodo != null){
-            NodoArbol nodoHijoIzq = unNodo.getHijoIzq();
-            NodoArbol nodoHijoDer = unNodo.getHijoDer();
+            NodoArbolBin nodoHijoIzq = unNodo.getHijoIzq();
+            NodoArbolBin nodoHijoDer = unNodo.getHijoDer();
             if(nodoHijoIzq != null || nodoHijoDer != null){
                 if (nodoHijoIzq != null) {
                     if(nodoHijoIzq.getElemento().equals(elemHijo))

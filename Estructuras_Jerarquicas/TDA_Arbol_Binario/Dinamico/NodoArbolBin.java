@@ -1,12 +1,12 @@
 package Estructuras_Jerarquicas.TDA_Arbol_Binario.Dinamico;
 
-class NodoArbol {
+class NodoArbolBin {
     private Object elemento;
-    private NodoArbol hijoIzq;
-    private NodoArbol hijoDer;
+    private NodoArbolBin hijoIzq;
+    private NodoArbolBin hijoDer;
 
     //Constructor
-    public NodoArbol(Object unElemento, NodoArbol HI, NodoArbol HD){
+    public NodoArbolBin(Object unElemento, NodoArbolBin HI, NodoArbolBin HD){
         this.elemento = unElemento;
         this.hijoDer = HD;
         this.hijoIzq = HI;
@@ -17,11 +17,11 @@ class NodoArbol {
         return this.elemento;
     }
 
-    public NodoArbol getHijoIzq(){
+    public NodoArbolBin getHijoIzq(){
         return this.hijoIzq;
     }
 
-    public NodoArbol getHijoDer(){
+    public NodoArbolBin getHijoDer(){
         return this.hijoDer;
     }
 
@@ -30,11 +30,11 @@ class NodoArbol {
         this.elemento = unElemento;
     }
 
-    public void setHijoIzq(NodoArbol unNodo){
+    public void setHijoIzq(NodoArbolBin unNodo){
         this.hijoIzq = unNodo;
     }
 
-    public void setHijoDer(NodoArbol unNodo){
+    public void setHijoDer(NodoArbolBin unNodo){
         this.hijoDer = unNodo;
     }
 }

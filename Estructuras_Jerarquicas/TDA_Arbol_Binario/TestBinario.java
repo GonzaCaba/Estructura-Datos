@@ -214,8 +214,6 @@ public class TestBinario {
         System.out.println("Inserto el 50 en el clon " + ((b.insertar(50, null, 'D')) ? sOk : sErr));
         System.out.println("");
         System.out.println("Frontera de clon con solo raiz.\n Tiene que dar: [ 50 ]  " + b.frontera().toString());
-
-        System.out.println("Ancestros de 12: " + a.obtenerAncestros(12));
     }
 
 }
