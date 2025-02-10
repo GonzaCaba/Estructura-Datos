@@ -1,7 +1,5 @@
 package Estructuras_Jerarquicas.TDA_Arbol_Generico.Dinamico;
 
-import javax.swing.tree.AbstractLayoutCache.NodeDimensions;
-
 import TDA_Cola.Dinamica.Cola;
 import TDA_Lista.Dinamica.Lista;
 
@@ -88,6 +86,15 @@ public class ArbolGen {
 
     public void vaciar(){
         this.raiz = null;
+    }
+
+    public int grado(){
+        return this.gradoAux(this.raiz);
+    }
+
+    public int gradoSubarbol(Object unElemento){
+        int grado = this.gradoSubarbolAux(this.buscarNodo(this.raiz, unElemento));
+        return grado;
     }
 
     public Lista listarPreorden(){
@@ -350,5 +357,51 @@ public class ArbolGen {
             }
         }
         return s;
+    }
+
+    private int gradoSubarbolAux(NodoArbolGen nodoRaiz){
+        int cantHijos = -1;
+        if(nodoRaiz != null){
+            cantHijos = 0;
+            if(nodoRaiz.getHEI() != null){
+                cantHijos = cantHijos + 1;
+                NodoArbolGen nodoHermano = nodoRaiz.getHEI().getHD();
+                while(nodoHermano != null){
+                    cantHijos = cantHijos + 1;
+                    nodoHermano = nodoHermano.getHD();
+                }
+            }
+        }
+        return cantHijos;
+    }
+
+    private int gradoAux(NodoArbolGen nodoRaiz){
+        int gradoRaiz;
+        int gradoHijoMayor;
+        int gradoHijoSiguiente;
+        int mayorGrado = -1;
+        if(nodoRaiz != null){
+            gradoRaiz = this.gradoSubarbolAux(nodoRaiz);
+            if(nodoRaiz.getHEI() != null){
+                //Primero obtiene el grado del hijo extremo izquierdo.
+                gradoHijoMayor = this.gradoAux(nodoRaiz.getHEI());
+                NodoArbolGen nodoHermano = nodoRaiz.getHEI().getHD();
+                while(nodoHermano != null){
+                    //Luego va obteniendo uno por uno el grado de los demas hijos y los compara con quien tiene el grado mas alto.
+                    gradoHijoSiguiente = this.gradoAux(nodoHermano);
+                    if(gradoHijoSiguiente > gradoHijoMayor){
+                        gradoHijoMayor = gradoHijoSiguiente;
+                    }
+                    nodoHermano = nodoHermano.getHD();
+                }
+                if(gradoRaiz >= gradoHijoMayor){
+                    mayorGrado = gradoRaiz;
+                } else{
+                    mayorGrado = gradoHijoMayor;
+                }
+            } else
+                mayorGrado = gradoRaiz;
+        }
+        return mayorGrado;
     }
 }
