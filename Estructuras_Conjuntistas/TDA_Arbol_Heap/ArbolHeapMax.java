@@ -1,11 +1,14 @@
-package Estructuras_Conjuntistas.TDA_Arbol_Heap.Estatico;
-
-public class ArbolHeapMin {
+package Estructuras_Conjuntistas.TDA_Arbol_Heap;
+/**
+ *
+ * @author Cabanne, Gonzalo Heber
+ */
+public class ArbolHeapMax {
     private final int TAMANIO = 20;
     private int ultimo;
     private Comparable[] heap;
 
-    public ArbolHeapMin(){
+    public ArbolHeapMax(){
         this.heap = new Comparable[this.TAMANIO];
         this.ultimo = 0;    //La posicion 0 nunca es utilizada.
     }
@@ -60,7 +63,7 @@ public class ArbolHeapMin {
         return !(this.ultimo>0);
     }
 
-    public void vaciar()
+    public void vaciar(){
         if(this.ultimo > 0){
             for(int var = 1; var <= this.ultimo; var++){
                 this.heap[var] = null;
@@ -72,13 +75,13 @@ public class ArbolHeapMin {
     // Metodos Privados & Auxiliares
     private void hacerSubir(int unaPos){
         //Si la posicion pasada no es la raiz y esta dentro del rango del arreglo...
-        if(unaPos > 1 && unaPos <= this.ultimo){
+        if(unaPos > 1 && unaPos <= this.TAMANIO){
             int posPadre = unaPos%2;
             Comparable valorPadre = this.heap[posPadre];
             Comparable valorHijo = this.heap[unaPos];
-            //Verifica si el padre es mayor que el hijo.
-            if(valorPadre.compareTo(valorHijo)>0){
-                //Si es mayor, se intercambian padre con hijo.
+            //Verifica si el padre es menor que el hijo.
+            if(valorPadre.compareTo(valorHijo)<0){
+                //Si es menor, se intercambian padre con hijo.
                 this.heap[posPadre] = valorHijo;
                 this.heap[unaPos] = valorPadre;
                 this.hacerSubir(posPadre);
@@ -91,24 +94,24 @@ public class ArbolHeapMin {
         if(unaPos > 0 && unaPos <= this.ultimo){
             int posHijoIzq = unaPos*2;
             int posHijoDer = unaPos*2 + 1;
-            int posHijoMenor;
+            int posHijoMayor;
             Comparable valorPadre = this.heap[unaPos];
             Comparable valorHijo;
-            //Verifica cual de los dos hijos tiene el menor valor
-            if(this.heap[posHijoIzq].compareTo(this.heap[posHijoDer])<0){
+            //Verifica cual de los dos hijos tiene el mayor valor
+            if(this.heap[posHijoIzq].compareTo(this.heap[posHijoDer])>0){
                 valorHijo = this.heap[posHijoIzq];
-                posHijoMenor = posHijoIzq;
+                posHijoMayor = posHijoIzq;
             } else{
                 valorHijo = this.heap[posHijoDer];
-                posHijoMenor = posHijoDer;
+                posHijoMayor = posHijoDer;
             }
-            //Ahora verifica si la nueva raiz es mayor al hijo de menor tamaño
-            if(valorPadre.compareTo(valorHijo)>0){
+            //Ahora verifica si la nueva raiz es menor al hijo de menor tamaño
+            if(valorPadre.compareTo(valorHijo)<0){
                 //Si lo es, intercambia sus valores
-                this.heap[posHijoMenor] = valorPadre;
+                this.heap[posHijoMayor] = valorPadre;
                 this.heap[unaPos] = valorHijo;
                 //Repite el mismo proceso.
-                this.hacerBajar(posHijoMenor);
+                this.hacerBajar(posHijoMayor);
             }
         }
     }

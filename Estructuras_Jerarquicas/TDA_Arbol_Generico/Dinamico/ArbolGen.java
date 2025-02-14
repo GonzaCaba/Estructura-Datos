@@ -1,5 +1,8 @@
 package Estructuras_Jerarquicas.TDA_Arbol_Generico.Dinamico;
-
+/**
+ *
+ * @author Cabanne, Gonzalo Heber
+ */
 import TDA_Cola.Dinamica.Cola;
 import TDA_Lista.Dinamica.Lista;
 

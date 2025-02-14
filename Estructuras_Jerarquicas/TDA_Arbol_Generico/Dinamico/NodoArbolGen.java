@@ -1,6 +1,9 @@
 package Estructuras_Jerarquicas.TDA_Arbol_Generico.Dinamico;
-
-public class NodoArbolGen {
+/**
+ *
+ * @author Cabanne, Gonzalo Heber
+ */
+class NodoArbolGen {
     private Object elemento;
     private NodoArbolGen hijoExtremoIzquierdo;
     private NodoArbolGen hermanoDerecho;
