@@ -61,6 +61,11 @@ public class ArbolBB {
         return (this.raiz == null);
     }
 
+    public String toString(){
+        String s = this.toStringAux(this.raiz);
+        return s;
+    }
+
     public ArbolBB clone(){
         ArbolBB arbolClone = new ArbolBB();
         arbolClone.raiz = this.cloneAux(this.raiz);
@@ -154,6 +159,30 @@ public class ArbolBB {
                 unNodo.setHijoIzq(new NodoABB(unElemento, null, null));
         }
         return exito;
+    }
+
+    private String toStringAux(NodoABB unNodo){
+        String cadena = "";
+        if(unNodo != null){
+            cadena = "Raiz: "+unNodo.getElemento();
+            if (unNodo.getHijoIzq() != null) {
+                cadena += "     H.I: "+unNodo.getHijoIzq().getElemento();
+            } else{
+                cadena += "     H.I: -";
+            }
+            if(unNodo.getHijoDer() != null){
+                cadena += "     H.D: "+unNodo.getHijoDer().getElemento();
+            } else{
+                cadena += "     H.D: -";
+            }
+            if (unNodo.getHijoIzq() != null) {
+                cadena += "\n" + toStringAux(unNodo.getHijoIzq());
+            }
+            if (unNodo.getHijoDer() != null) {
+                cadena += "\n" + toStringAux(unNodo.getHijoDer());
+            }
+        }
+        return cadena;
     }
 
     private boolean eliminarAux(NodoABB unNodo, NodoABB nodoPadre, Comparable unElemento){

@@ -58,8 +58,17 @@ public class ArbolAVL {
         return exito;
     }
 
+    public String toString(){
+        String s = this.toStringAux(this.raiz);
+        return s;
+    }
+
     public boolean esVacio(){
         return (this.raiz == null);
+    }
+
+    public int altura(){
+        return this.alturaAux(this.raiz);
     }
 
     public ArbolAVL clone(){
@@ -134,6 +143,57 @@ public class ArbolAVL {
             }
         }
         return seEncontro;
+    }
+
+    private int alturaAux(NodoAVL unNodo){
+        int alturaArbol = -1;
+        if (unNodo != null) {
+            NodoAVL hijoIzq = unNodo.getHijoIzq();
+            NodoAVL hijoDer = unNodo.getHijoDer();
+            if(hijoIzq == null && hijoDer == null){
+                //Es una hoja, la altura del arbol es 0
+                alturaArbol = 0;
+            } else{
+                int altArbolIzq = -1;
+                int altArbolDer = -1;
+                if(hijoIzq != null){
+                    altArbolIzq = alturaAux(unNodo.getHijoIzq());
+                }
+                if(hijoDer != null){
+                    altArbolDer = alturaAux(unNodo.getHijoDer());
+                }
+                if(altArbolIzq >= altArbolDer){
+                    alturaArbol = altArbolIzq + 1;
+                } else{
+                    alturaArbol = altArbolDer + 1;
+                }
+            }
+        }
+        return alturaArbol;
+    }
+
+    private String toStringAux(NodoAVL unNodo){
+        String cadena = "";
+        if(unNodo != null){
+            cadena = "Raiz: "+unNodo.getElemento();
+            if (unNodo.getHijoIzq() != null) {
+                cadena += "     H.I: "+unNodo.getHijoIzq().getElemento();
+            } else{
+                cadena += "     H.I: -";
+            }
+            if(unNodo.getHijoDer() != null){
+                cadena += "     H.D: "+unNodo.getHijoDer().getElemento();
+            } else{
+                cadena += "     H.D: -";
+            }
+            if (unNodo.getHijoIzq() != null) {
+                cadena += "\n" + toStringAux(unNodo.getHijoIzq());
+            }
+            if (unNodo.getHijoDer() != null) {
+                cadena += "\n" + toStringAux(unNodo.getHijoDer());
+            }
+        }
+        return cadena;
     }
 
     private boolean insertarAux(NodoAVL unNodo, Comparable unElemento){
