@@ -1,5 +1,6 @@
 package Estructuras_Conjuntistas.TDA_Arbol_AVL;
 
+import TDA_Cola.Dinamica.Cola;
 import TDA_Lista.Dinamica.Lista;
 /**
  *
@@ -18,8 +19,12 @@ public class ArbolAVL {
         //Caso unico, el arbol esta vacio.
         if(this.raiz == null){
             this.raiz = new NodoAVL(unElem, null, null, 0);
+            exito = true;
         } else{
             exito = this.insertarAux(this.raiz, unElem);
+            if(exito){
+                this.balancearArbol(this.raiz, null);
+            }
         }
         return exito;
     }
@@ -77,22 +82,6 @@ public class ArbolAVL {
         return arbolClone;
     }
 
-    public Lista listar(){
-        //Devuelve una lista ordenada del arbol que , por la naturaleza
-        //del funcionamiento del arbol de busqueda, sera una lista in orden. 
-        Lista lis = new Lista();
-        this.listarInordenAux(this.raiz, lis);
-        return lis;
-    }
-
-    public Lista listarRango(Comparable elemMinimo, Comparable elemMaximo){
-        Lista lis = new Lista();
-        if(elemMaximo != null && elemMinimo != null){
-            this.listarInOrdenRangoAux(this.raiz, lis, elemMinimo, elemMaximo);
-        }
-        return lis;
-    }
-
     public Comparable minimoElem(){
         Comparable elementoMinimo = null;
         if(this.raiz != null){
@@ -125,12 +114,85 @@ public class ArbolAVL {
         return elementoMaximo;
     }
 
+    public Comparable padre(Comparable unElemento){
+        return this.padreAux(this.raiz, unElemento);
+    }
+
     public void vaciar(){
         this.raiz = null;
     }
 
+    public Lista obtenerAncestros(Comparable unElemento){
+        Lista listaAncestros = new Lista();
+        this.obtenerAncestrosAux(this.raiz, listaAncestros, unElemento);
+        return listaAncestros;
+    }
+
+    // De Lista
+    public Lista listarPorNiveles(){
+        Lista listaPorNiveles = new Lista();
+        this.listarPorNivelesAux(this.raiz, listaPorNiveles);
+        return listaPorNiveles;
+    }
+
+    public Lista listar(){
+        //Devuelve una lista ordenada del arbol que , por la naturaleza
+        //del funcionamiento del arbol de busqueda, sera una lista in orden. 
+        Lista lis = new Lista();
+        this.listarInordenAux(this.raiz, lis);
+        return lis;
+    }
+
+    public Lista listarRango(Comparable elemMinimo, Comparable elemMaximo){
+        Lista lis = new Lista();
+        if(elemMaximo != null && elemMinimo != null){
+            this.listarInOrdenRangoAux(this.raiz, lis, elemMinimo, elemMaximo);
+        }
+        return lis;
+    }
+
+
 
     //Metodos Privados & Auxiliares
+    private boolean obtenerAncestrosAux(NodoAVL unNodo, Lista lis, Comparable unElem){
+        boolean seEncontro = false;
+        if(unNodo != null){
+            //Si se encontro el elemento devuelve true
+            if(unNodo.getElemento().compareTo(unElem)==0){
+                seEncontro = true;
+            } else{
+                //Si no se encontró, añade el elemento a la lista y busca en los hijos
+                if(unElem.compareTo(unNodo.getElemento())>0){
+                    seEncontro = this.obtenerAncestrosAux(unNodo.getHijoDer(), lis, unElem);
+                } else{
+                    seEncontro = this.obtenerAncestrosAux(unNodo.getHijoIzq(), lis, unElem);
+                }
+                if(seEncontro)
+                    lis.insertar(unNodo.getElemento(), lis.longitud()+1);
+            }
+        }
+        return seEncontro;
+    }
+  
+    private void listarPorNivelesAux(NodoAVL unNodo, Lista lis){
+        if(unNodo != null){
+            NodoAVL nodoActual;
+            Cola queue = new Cola();
+            queue.poner(unNodo);
+            while(!queue.esVacia()){
+                nodoActual = (NodoAVL) queue.obtenerFrente();
+                lis.insertar(nodoActual.getElemento(), lis.longitud()+1);
+                queue.sacar();
+                if(nodoActual.getHijoIzq() != null){
+                    queue.poner(nodoActual.getHijoIzq());
+                }
+                if(nodoActual.getHijoDer() != null){
+                    queue.poner(nodoActual.getHijoDer());
+                }
+            }
+        }
+    }
+
     private boolean perteneceAux(NodoAVL unNodo, Comparable unElemento){
         boolean seEncontro = false;
         if(unNodo!=null){
@@ -143,6 +205,36 @@ public class ArbolAVL {
             }
         }
         return seEncontro;
+    }
+
+    private Comparable padreAux(NodoAVL unNodo, Comparable unElemento){
+        Comparable elementoPadre = null;
+        if(unNodo!=null){
+            if(unElemento.compareTo(unNodo.getElemento())>0){
+                //Si el elemento es mayor que el elemento del nodo actual, busca en el hijo derecho.
+                if(unNodo.getHijoDer()!=null){
+                    Comparable elementoHD = unNodo.getHijoDer().getElemento(); 
+                    if(unElemento.compareTo(elementoHD)==0){
+                        //Se encontro el nodo padre
+                        elementoPadre = unNodo.getElemento();
+                    } else{
+                        elementoPadre = this.padreAux(unNodo.getHijoDer(), unElemento);
+                    }
+                }
+            } else if(unElemento.compareTo(unNodo.getElemento())<0){
+                //Si el elemento es menor que el elemento del nodo actual, busca en el hijo izquierdo.
+                if(unNodo.getHijoIzq()!=null){
+                    Comparable elementoHI = unNodo.getHijoIzq().getElemento(); 
+                    if(unElemento.compareTo(elementoHI)==0){
+                        //Se encontro el nodo padre
+                        elementoPadre = unNodo.getElemento();
+                    } else{
+                        elementoPadre = this.padreAux(unNodo.getHijoIzq(), unElemento);
+                    }
+                }
+            }
+        }
+        return elementoPadre;
     }
 
     private int alturaAux(NodoAVL unNodo){
@@ -213,8 +305,10 @@ public class ArbolAVL {
                     //Luego de calcular la nueva altura del nodo se debe verificar si existe un desbalance.
                     this.balancearArbol(unNodo.getHijoDer(), unNodo);
                 }
-            } else
+            } else{
                 unNodo.setHijoDer(new NodoAVL(unElemento, null, null, 0));
+                unNodo.recalcularAltura();
+            }
         } else{
             // Si el elemento es menor que la raiz, entonces buscamos en el hijo izquierdo
             if(unNodo.getHijoIzq()!=null){
@@ -223,8 +317,10 @@ public class ArbolAVL {
                     unNodo.recalcularAltura();
                     this.balancearArbol(unNodo.getHijoIzq(), unNodo);
                 }
-            } else
+            } else {
                 unNodo.setHijoIzq(new NodoAVL(unElemento, null, null, 0));
+                unNodo.recalcularAltura();
+            }
         }
         return exito;
     }
@@ -232,7 +328,6 @@ public class ArbolAVL {
     private boolean eliminarAux(NodoAVL unNodo, NodoAVL nodoPadre, Comparable unElemento){
         //Precondicion: unNodo no es nulo ni es la raiz
         boolean exito = false;
-        NodoAVL nodoHijo;
         if(unNodo!=null){
             if ((unElemento.compareTo(unNodo.getElemento()))==0) {
                 //Una vez encontrado, se aplican los casos
@@ -244,6 +339,10 @@ public class ArbolAVL {
                 } else if(tieneHijoIzq && tieneHijoDer){
                     //Caso 3: El nodo tiene dos hijos.
                     exito = this.eliminarCaso3(unNodo);
+                    if(exito){
+                        unNodo.recalcularAltura();
+                        this.balancearArbol(unNodo, nodoPadre);
+                    }
                 } else{
                     //Caso 2: El nodo tiene un solo hijo.
                     exito = this.eliminarCaso2(nodoPadre, unNodo);
@@ -288,7 +387,14 @@ public class ArbolAVL {
                     this.rotacionSimpleDer(unNodo, unNodo.getHijoDer());
                     this.rotacionSimpleIzq(nodoPadre, unNodo);
                 }
+                //Recalculamos la altura del arbol balanceado
+                //Caso especial: es la raiz.
+                if(nodoPadre==null)
+                    this.recalcularAlturaArbol(this.raiz);
+                else
+                    this.recalcularAlturaArbol(nodoPadre);
             } else if(balance > 1){
+                //Caso 2: El arbol esta caido para la izquierda.
                 balanceHijo = this.calcularBalanceArbol(unNodo.getHijoIzq());
                 //Si el subarbol hijo izquierdo, tambien esta caido hacia la izquierda
                 //se aplica rotacion simple a der.
@@ -300,19 +406,30 @@ public class ArbolAVL {
                     this.rotacionSimpleIzq(unNodo, unNodo.getHijoIzq());
                     this.rotacionSimpleDer(nodoPadre, unNodo);
                 }
+                //Recalculamos la altura del arbol balanceado
+                //Caso especial: es la raiz.
+                if(nodoPadre==null)
+                    this.recalcularAlturaArbol(this.raiz);
+                else
+                    this.recalcularAlturaArbol(nodoPadre);
             }
         }
     }
 
     private void rotacionSimpleIzq(NodoAVL nodoPadre, NodoAVL nodoRaiz){
         //Precondicion: el hijo derecho no es nulo (balance hijo der es -1 o 0).
-        if(nodoPadre != null && nodoRaiz !=null){ 
+        if(nodoRaiz !=null){ 
             NodoAVL nodoHijoDer = nodoRaiz.getHijoDer();
             //Remplazamos la raiz por el nodoHijoDer
-            if(nodoPadre.getHijoIzq()==nodoRaiz){
-                nodoPadre.setHijoIzq(nodoHijoDer);
-            } else if(nodoPadre.getHijoDer()==nodoRaiz){
-                nodoPadre.setHijoDer(nodoHijoDer);
+            //Consideramos caso especial, nodoPadre = null, es decir nodoRaiz es la raiz del arbol.
+            if(nodoPadre == null){
+                this.raiz = nodoHijoDer;
+            } else{
+                if(nodoPadre.getHijoIzq()==nodoRaiz){
+                    nodoPadre.setHijoIzq(nodoHijoDer);
+                } else if(nodoPadre.getHijoDer()==nodoRaiz){
+                    nodoPadre.setHijoDer(nodoHijoDer);
+                }
             }
             //Coloca como hijo derecho de la antigua raiz, al hijo izquierdo de la nueva raiz.
             nodoRaiz.setHijoDer(nodoHijoDer.getHijoIzq());
@@ -323,14 +440,19 @@ public class ArbolAVL {
 
     private void rotacionSimpleDer(NodoAVL nodoPadre, NodoAVL nodoRaiz){
         //Precondicion: el hijo izquierdo no es nulo (balance hijo izq es 1 o 0).
-        if(nodoPadre != null && nodoRaiz !=null){ 
+        if(nodoRaiz !=null){ 
             NodoAVL nodoHijoIzq = nodoRaiz.getHijoIzq();
             //Remplazamos la raiz por el nodoHijoIzq
-            if(nodoPadre.getHijoIzq()==nodoRaiz){
-                nodoPadre.setHijoIzq(nodoHijoIzq);
-            } else if(nodoPadre.getHijoDer()==nodoRaiz){
-                nodoPadre.setHijoDer(nodoHijoIzq);
-            }
+            //Consideramos caso especial, nodoPadre = null, es decir nodoRaiz es la raiz del arbol.
+            if(nodoPadre == null){
+                this.raiz = nodoHijoIzq;
+            } else{
+                if(nodoPadre.getHijoIzq()==nodoRaiz){
+                    nodoPadre.setHijoIzq(nodoHijoIzq);
+                } else if(nodoPadre.getHijoDer()==nodoRaiz){
+                    nodoPadre.setHijoDer(nodoHijoIzq);
+                }
+            } 
             //Coloca como hijo izquierdo de la antigua raiz, al hijo derecho de la nueva raiz.
             nodoRaiz.setHijoIzq(nodoHijoIzq.getHijoDer());
             //Coloca como hijo derecho de la nueva raiz, a la antigua raiz.
@@ -364,6 +486,14 @@ public class ArbolAVL {
             nodoClon = new NodoAVL(unNodo.getElemento(), cloneAux(unNodo.getHijoIzq()), cloneAux(unNodo.getHijoDer()),unNodo.getAltura());
         }
         return nodoClon;
+    }
+
+    private void recalcularAlturaArbol(NodoAVL nodoRaiz){
+        if(nodoRaiz != null){
+            nodoRaiz.recalcularAltura();
+            this.recalcularAlturaArbol(nodoRaiz.getHijoIzq());
+            this.recalcularAlturaArbol(nodoRaiz.getHijoDer());
+        }
     }
 
     private boolean eliminarCaso1(NodoAVL nodoPadre, NodoAVL nodoRaiz){
@@ -420,7 +550,7 @@ public class ArbolAVL {
     private boolean eliminarCaso3Aux(NodoAVL nodoRaiz, NodoAVL nodoCandidato, NodoAVL nodoPadreCandidato){
         boolean exito = false;
         if(nodoCandidato != null && nodoPadreCandidato != null){
-            if(nodoRaiz.getHijoDer()!=null){
+            if(nodoCandidato.getHijoDer()!=null){
                 exito = eliminarCaso3Aux(nodoRaiz, nodoCandidato.getHijoDer(), nodoCandidato);
                 if(exito){
                     //Si se elimino el hijo para remplazar la raiz, debemos recalcular la altura
