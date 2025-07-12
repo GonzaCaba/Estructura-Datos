@@ -12,7 +12,7 @@ public class Pila {
 
     public boolean apilar(Object nuevoElemento) {
         boolean exito;
-        if (this.tope+1 >= this.TAMANIO){
+        if (this.tope+1 >= Pila.TAMANIO){
             //ERROR: pila llena
             exito = false;
         }
@@ -64,7 +64,7 @@ public class Pila {
         //Creamos una pila nueva
         Pila pilaClon = new Pila();
         //Recorremos toda la pila original asignando cada elemento de la pila original en la posicion correspondiente a la clon
-        for(int i = 0; i<this.TAMANIO;i++){
+        for(int i = 0; i<Pila.TAMANIO;i++){
             pilaClon.arreglo[i] = this.arreglo[i];
         }
         pilaClon.tope = this.tope;
@@ -73,7 +73,7 @@ public class Pila {
 
     public String toString(){
         String cadena = "\nInicio de Pila ↓ \n";
-        for(int i = 0; i<this.TAMANIO; i++){
+        for(int i = 0; i<Pila.TAMANIO; i++){
             cadena = cadena + this.arreglo[i] + "\n";
         }
         cadena = cadena + "Final de Pila ↑";

@@ -1,7 +1,5 @@
 package Estructuras_Conjuntistas.TDA_Arbol_AVL;
 
-import Estructuras_Conjuntistas.TDA_Arbol_AVL.ArbolAVL;
-
 public class TestAVL {
     
     static String sOk = "\u001B[32m OK! \u001B[0m", sErr = " \u001B[31m ERROR \u001B[0m";

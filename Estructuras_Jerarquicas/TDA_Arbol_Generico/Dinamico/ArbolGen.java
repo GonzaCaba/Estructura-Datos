@@ -313,7 +313,6 @@ public class ArbolGen {
     private void listarPorNiveles(NodoArbolGen nodoRaiz, Lista lis){
         if(nodoRaiz != null){
             NodoArbolGen nodoActual;
-            NodoArbolGen nodoHijo;
             NodoArbolGen nodoHermano;
             Cola queue = new Cola();
             queue.poner(nodoRaiz);

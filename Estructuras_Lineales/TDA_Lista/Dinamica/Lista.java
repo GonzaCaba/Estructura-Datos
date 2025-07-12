@@ -14,7 +14,7 @@ public class Lista {
         // de la lista se incrementa en 1. Para una inserción exitosa, la posición recibida debe ser 1 ≤ pos ≤
         // longitud(lista) + 1. Devuelve verdadero si se puede insertar correctamente y falso en caso contrario. 
         boolean exito = esPosValidaInsertar(unaPosicion);
-        if(exito){
+        if(exito && unElemento != null){
             //Caso 1: Se quiere insertar el nuevo elemento en la pos 1.
             if(unaPosicion == 1){
                 this.cabecera = new Nodo(unElemento, this.cabecera);

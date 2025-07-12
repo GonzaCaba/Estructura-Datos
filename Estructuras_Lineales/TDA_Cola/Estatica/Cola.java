@@ -15,7 +15,7 @@ public class Cola {
     public boolean poner(Object unElemento){
         boolean exito;
         //Si el puntero final en la siguiente posicion apunta a el puntero frente, entonces significa que la cola esta llena
-        if((this.fin + 1)%this.TAMANIO == this.frente){
+        if((this.fin + 1)%Cola.TAMANIO == this.frente){
             //ERROR: cola llena
             exito = false;
         }

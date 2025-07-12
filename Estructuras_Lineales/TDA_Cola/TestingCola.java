@@ -20,7 +20,6 @@ public class TestingCola {
 		System.out.println("COMIENZO TEST COLA");
 		Cola q1 = new Cola();
 		System.out.println("Cola vac�a: \t\t\t\t\t\t\t--> " + q1.toString());
-		boolean exito = true;
 
 		System.out.println("Si es cola estatica tama�o <= 10 se debe llenar");
 		int num = 1;
